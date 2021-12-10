@@ -7,3 +7,7 @@ build:
 # Running the docker image
 run: build
 	docker run --rm -it javiervargas/veriff-submission:latest
+
+# To develop inside the container
+dev: build
+	docker run -d -it -v $$PWD:/veriff-submission/ --entrypoint /bin/bash javiervargas/veriff-submission:latest
