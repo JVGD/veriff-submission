@@ -59,14 +59,17 @@ class MNISTDataModule(pl.LightningDataModule):
         logging.info(f"Test: {len(self.mnist_test)}")
 
     def train_dataloader(self) -> DataLoader:
+        """Returns the dataloader for the train dataset"""
         return DataLoader(self.mnist_train, batch_size=self.batch_size,
                           num_workers=self.num_workers)
 
     def val_dataloader(self) -> DataLoader:
+        """Returns the dataloader for the validation dataset"""
         return DataLoader(self.mnist_valid, batch_size=self.batch_size,
                           num_workers=self.num_workers)
 
     def test_dataloader(self) -> DataLoader:
+        """Returns the dataloader for the test dataset"""
         return DataLoader(self.mnist_test, batch_size=self.batch_size,
                           num_workers=self.num_workers)
 
