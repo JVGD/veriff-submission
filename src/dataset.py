@@ -22,6 +22,11 @@ class MNISTDataModule(pl.LightningDataModule):
         self.batch_size = batch_size
         self.num_workers = num_workers
 
+        # Logging
+        logging.info(f"data_dir: {data_dir}")
+        logging.info(f"batch_size: {batch_size}")
+        logging.info(f"num_workers: {num_workers}")
+
     def setup(self, stage: str=None) -> None:
         """Set up the datasets subsets: train / valid / test
 
