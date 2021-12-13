@@ -9,3 +9,6 @@ MNIST/
 
 # Binaries
 __pycache__/
+
+# Model weights and logs
+weights/

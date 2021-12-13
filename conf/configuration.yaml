@@ -1,0 +1,34 @@
+experiment:
+  name: Experiment1
+  save_dir: ./weights
+
+datamodule:
+  data_dir: ./
+  batch_size: 64
+  num_workers: 4
+
+model:
+  optimizer:
+    lr: 0.01
+    momentum: 0
+    weight_decay: 0
+
+trainer:
+  max_epochs: 200
+  accelerator: cpu
+  gpus: null
+  tpu_cores: null
+  ipus: null
+  log_every_n_steps: 100
+  precision: 32
+  sync_batchnorm: True
+  num_sanity_val_steps: 0
+  overfit_batches: 5
+  fast_dev_run: False
+
+checkpoints:
+  filename: epoch{epoch}_{lossval:.2f}
+  monitor: loss_val
+  save_last: True
+  every_n_epochs: 10
+
