@@ -1,7 +1,12 @@
+import logging
+
 import pytorch_lightning as pl
 import torch as T
 import torch.nn.functional as F
 from torch import nn
+from torch.utils.data.dataloader import DataLoader
+from torchvision import transforms
+from torchvision.datasets import FakeData
 
 from src.stn import SpatialTransformerNetwork
 
@@ -17,6 +22,7 @@ class BaseModel(pl.LightningModule):
     `PL Docs <https://pytorch-lightning.rtfd.io/en/latest/>`_
     """
     def __init__(self) -> None:
+        """Init model and base layers"""
         # Init base class
         super().__init__()
 
@@ -29,6 +35,9 @@ class BaseModel(pl.LightningModule):
         self.conv2_drop = nn.Dropout2d()
         self.fc1 = nn.Linear(320, 50)
         self.fc2 = nn.Linear(50, 10)
+
+        # Logging
+        logging.info(f"Model {self.__class__.__name__}")
 
     def forward(self, x: T.Tensor) -> T.Tensor:
         """Forward Pass of the model"""
@@ -44,8 +53,37 @@ class BaseModel(pl.LightningModule):
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
 
+    def configure_optimizers(self) -> T.optim.Optimizer:
+        """Optimizer to use during training"""
+        return T.optim.SGD(self.parameters(), lr=0.01)
 
-def test_BaseModel() -> None:
+    def training_step(self, batch, batch_idx) -> T.Tensor:
+        """Training step for the training loop"""
+        # Unpacking batch, forward, loss and logging
+        samples, targets_true = batch
+        targets_pred = self(samples)
+        loss = F.nll_loss(input=targets_pred, target=targets_true)
+        self.log("loss_train", loss, on_step=False, on_epoch=True)
+        return loss
+
+    def validation_step(self, batch, batch_idx) -> None:
+        """Validation step for the validation loop"""
+        # Unpacking batch, forward, loss and logging
+        samples, targets_true = batch
+        targets_pred = self(samples)
+        loss = F.nll_loss(input=targets_pred, target=targets_true)
+        self.log("loss_valid", loss, on_step=False, on_epoch=True)
+
+    def test_step(self, batch, batch_idx) -> None:
+        """Test step for the test loop"""
+        # Unpacking batch, forward, loss and logging
+        samples, targets_true = batch
+        targets_pred = self(samples)
+        loss = F.nll_loss(input=targets_pred, target=targets_true)
+        self.log("loss_test", loss, on_step=False, on_epoch=True)
+
+
+def test_BaseModel_forward() -> None:
     """Testing base model"""
     # Testing instancing
     model = BaseModel()
@@ -54,3 +92,35 @@ def test_BaseModel() -> None:
     x = T.rand(8,1,28,28)
     y = model(x)
     assert y.shape == (8, 10)
+
+
+def test_BaseModel_train() -> None:
+    """Testing training with fake data"""
+    # Fake dataset we are testing training logic not convergence
+    ds = FakeData(
+        size=4*5,
+        image_size=(1, 28, 28),
+        num_classes=8,
+        transform=transforms.Compose([transforms.ToTensor()])
+    )
+
+    # Dataloaders
+    dl_train = DataLoader(dataset=ds, batch_size=4, shuffle=False)
+    dl_valid = DataLoader(dataset=ds, batch_size=4, shuffle=False)
+
+    # Model to test
+    model = BaseModel()
+
+    # Trainer setups for test
+    trainer = pl.Trainer(
+        logger=False,
+        checkpoint_callback=False,
+        enable_progress_bar=True,
+        overfit_batches=5,
+        # fast_dev_run=True,
+        max_epochs=1,
+        accelerator="cpu"
+    )
+
+    # Training test: model + data
+    trainer.fit(model, train_dataloaders=dl_train, val_dataloaders=dl_valid)
