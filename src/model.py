@@ -21,10 +21,17 @@ class BaseModel(pl.LightningModule):
 
     `PL Docs <https://pytorch-lightning.rtfd.io/en/latest/>`_
     """
-    def __init__(self) -> None:
-        """Init model and base layers"""
+    def __init__(self, optimizer: dict) -> None:
+        """Init model and base layers
+
+        Args:
+            optimizer (dict): Dict with optimizer conf
+        """
         # Init base class
         super().__init__()
+
+        # Configuration for optimizer
+        self.optimizer_conf = optimizer
 
         # STN
         self.stn = SpatialTransformerNetwork()
@@ -38,6 +45,7 @@ class BaseModel(pl.LightningModule):
 
         # Logging
         logging.info(f"{self.__class__.__name__}")
+        logging.info(f"optimizer: {self.optimizer_conf}")
 
     def forward(self, x: T.Tensor) -> T.Tensor:
         """Forward Pass of the model"""
@@ -55,7 +63,7 @@ class BaseModel(pl.LightningModule):
 
     def configure_optimizers(self) -> T.optim.Optimizer:
         """Optimizer to use during training"""
-        return T.optim.SGD(self.parameters(), lr=0.01)
+        return T.optim.SGD(self.parameters(), **self.optimizer_conf)
 
     def training_step(self, batch, batch_idx) -> T.Tensor:
         """Training step for the training loop"""
