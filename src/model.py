@@ -37,7 +37,7 @@ class BaseModel(pl.LightningModule):
         self.fc2 = nn.Linear(50, 10)
 
         # Logging
-        logging.info(f"Model {self.__class__.__name__}")
+        logging.info(f"{self.__class__.__name__}")
 
     def forward(self, x: T.Tensor) -> T.Tensor:
         """Forward Pass of the model"""
