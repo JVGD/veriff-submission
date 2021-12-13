@@ -22,6 +22,10 @@ def train(conf: dict) -> None:
         format='%(asctime)s [%(levelname)s] %(module)s - %(message)s'
     )
 
+    # Path to save weights for this experiment
+    dirpath = Path(conf["experiment"]["save_dir"],
+                             conf["experiment"]["name"]
+
     # Loading the datamodule
     dm_mnist = MNISTDataModule(**conf["datamodule"])
 
@@ -31,14 +35,7 @@ def train(conf: dict) -> None:
     # Setting up the trainer
     trainer = pl.Trainer(
         logger=TensorBoardLogger(**conf["experiment"]),
-        callbacks=[
-            ModelCheckpoint(
-                dirpath=Path(conf["experiment"]["save_dir"],
-                             conf["experiment"]["name"]
-                ),
-                **conf["checkpoints"]
-            )
-        ],
+        callbacks=[ModelCheckpoint(dirpath=dirpath, **conf["checkpoints"])],
         **conf["trainer"]
     )
 
