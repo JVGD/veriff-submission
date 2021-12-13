@@ -23,7 +23,7 @@ trainer:
   precision: 32
   sync_batchnorm: True
   num_sanity_val_steps: 0
-  overfit_batches: 5
+  overfit_batches: 0
   fast_dev_run: False
 
 checkpoints:
