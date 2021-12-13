@@ -15,5 +15,9 @@ WORKDIR /veriff-submission
 # Copy code
 COPY ./ /veriff-submission/
 
+# Expected external volumes are: input (conf) output (weights)
+VOLUME /veriff-submission/conf
+VOLUME /veriff-submission/weights
+
 # Command to run
 ENTRYPOINT python main.py
