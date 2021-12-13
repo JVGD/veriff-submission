@@ -1,6 +1,5 @@
 experiment:
-  name: Experiment1
-  save_dir: ./weights
+  save_dir: /weights
 
 datamodule:
   data_dir: ./

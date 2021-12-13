@@ -23,8 +23,8 @@ def train(conf: dict) -> None:
     )
 
     # Path to save weights for this experiment
-    dirpath = Path(conf["experiment"]["save_dir"],
-                             conf["experiment"]["name"]
+    dirpath = Path(conf["experiment"]["save_dir"], conf["experiment"]["name"])
+    logging.info(f"saving weights: {dirpath.absolute()}")
 
     # Loading the datamodule
     dm_mnist = MNISTDataModule(**conf["datamodule"])
