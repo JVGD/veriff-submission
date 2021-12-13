@@ -16,4 +16,4 @@ WORKDIR /veriff-submission
 COPY ./ /veriff-submission/
 
 # Command to run
-ENTRYPOINT /bin/bash
+ENTRYPOINT python main.py
