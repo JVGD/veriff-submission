@@ -1,6 +1,6 @@
 # Input and output folders
-CONF=$$PWD/conf
-WEIGHTS=$$PWD/weights
+CONF?=$(shell pwd)/conf
+WEIGHTS?=$(shell pwd)/weights
 
 # Default directive
 default: run
@@ -14,8 +14,8 @@ build:
 # weights will be saved in the WEIGHTS volume for persistency
 run: build
 	docker run --rm -it \
-		-v $(CONF):/veriff-submission/conf \
-		-v $(WEIGHTS):/veriff-submission/weights \
+		-v $(CONF):/conf \
+		-v $(WEIGHTS):/weights \
 		javiervargas/veriff-submission:latest
 
 # Running test (performed inside container)
