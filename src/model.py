@@ -94,7 +94,7 @@ class BaseModel(pl.LightningModule):
 def test_BaseModel_forward() -> None:
     """Testing base model"""
     # Testing instancing
-    model = BaseModel()
+    model = BaseModel(optimizer={"lr": 0.01})
 
     # Testing inference shapes
     x = T.rand(8,1,28,28)
@@ -117,7 +117,7 @@ def test_BaseModel_train() -> None:
     dl_valid = DataLoader(dataset=ds, batch_size=4, shuffle=False)
 
     # Model to test
-    model = BaseModel()
+    model = BaseModel(optimizer={"lr": 0.01})
 
     # Trainer setups for test
     trainer = pl.Trainer(
