@@ -1,12 +1,11 @@
 import logging
-import sys
 from pathlib import Path
 
 import pytorch_lightning as pl
+import yaml
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 
-sys.path.append(".")
 from src.dataset import MNISTDataModule
 from src.model import BaseModel
 
@@ -47,8 +46,14 @@ def train(conf: dict) -> None:
     trainer.fit(model, datamodule=dm_mnist)
 
 
-if __name__ == "__main__":
-    import yaml
-    with open("./conf/configuration.yaml", "r") as f:
+def test_trainer() -> None:
+    # Reading conf file
+    with open("conf/configuration.yaml", "r") as f:
         conf = yaml.safe_load(f)
+
+    # Overriding conf for testing
+    conf["trainer"]["max_epochs"] = 1
+    conf["trainer"]["overfit_batches"] = 3
+
+    # Testing trainer
     train(conf)
