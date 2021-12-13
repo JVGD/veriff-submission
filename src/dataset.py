@@ -74,7 +74,7 @@ class MNISTDataModule(pl.LightningDataModule):
                           num_workers=self.num_workers)
 
 
-def test_MNISTDataModule():
+def test_MNISTDataModule() -> None:
     """Simple code test for data module
 
     This test will be run automatically with pytest
@@ -102,7 +102,7 @@ def test_MNISTDataModule():
     assert batch_target_test.shape == (8,)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Quick testing
     logging.basicConfig(level=logging.INFO, format= '%(asctime)s [%(levelname)s] %(message)s')
     test_MNISTDataModule()
