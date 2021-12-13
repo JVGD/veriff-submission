@@ -1,2 +1,11 @@
-MNIST/*
-.vscode/*
+# Data
+MNIST/
+
+# IDE
+.vscode/
+
+# Automated test cache
+.pytest_cache/
+
+# Binaries
+__pycache__/
