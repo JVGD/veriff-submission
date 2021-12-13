@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytorch_lightning as pl
 import yaml
-from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger
 
 from src.dataset import MNISTDataModule
@@ -35,7 +35,9 @@ def train(conf: dict) -> None:
     # Setting up the trainer
     trainer = pl.Trainer(
         logger=TensorBoardLogger(**conf["experiment"]),
-        callbacks=[ModelCheckpoint(dirpath=dirpath, **conf["checkpoints"])],
+        callbacks=[
+            ModelCheckpoint(dirpath=dirpath, **conf["checkpoints"]),
+            EarlyStopping(**conf["early_stopping"])],
         **conf["trainer"]
     )
 
