@@ -47,12 +47,13 @@ def train(conf: dict) -> None:
 
 def test_trainer() -> None:
     # Reading conf file
-    with open("conf/configuration.yaml", "r") as f:
+    with open("./conf/configuration.yaml", "r") as f:
         conf = yaml.safe_load(f)
 
     # Overriding conf for testing
     conf["trainer"]["max_epochs"] = 1
     conf["trainer"]["overfit_batches"] = 3
+    conf["early_stopping"]["monitor"] = "loss_train"
 
     # Testing trainer
     train(conf)
