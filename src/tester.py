@@ -7,7 +7,7 @@ from src.dataset import MNISTDataModule
 from src.model import BaseModel
 
 
-def test(conf: dict) -> None:
+def check(conf: dict) -> None:
     """Tester
 
     Args:
@@ -24,14 +24,3 @@ def test(conf: dict) -> None:
 
     # Running test loop and getting a metric
     trainer.test(model, datamodule=dm_mnist)
-
-
-if __name__ == "__main__":
-    import yaml
-
-    # Reading YAML conf (/conf needs to be mounted in Docker Container)
-    with open("./conf/configuration.yaml", "r") as f:
-        conf = yaml.safe_load(f)
-
-    # Training
-    test(conf)

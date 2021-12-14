@@ -1,7 +1,7 @@
 import pytorch_lightning as pl
 import yaml
 
-from src.tester import test
+from src.tester import check
 from src.trainer import train
 
 # Entrypoint from the docker container
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         train(conf)
     elif conf["experiment"]["phase"] == 'test':
         # Run tester
-        test(conf)
+        check(conf)
     else:
         raise ValueError(
             "Only supported phases are: train and test however phase {} "
