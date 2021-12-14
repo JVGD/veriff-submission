@@ -39,6 +39,7 @@ def train(conf: dict) -> None:
         callbacks=[
             ModelCheckpoint(dirpath=dirpath, **conf["checkpoints"]),
             EarlyStopping(**conf["early_stopping"]),
+            DrawSTNTransform()
         ],
         **conf["trainer"]
     )
