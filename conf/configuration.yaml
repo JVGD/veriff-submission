@@ -19,7 +19,7 @@ model:
     weight_decay: 0     # SGD weight decay
 
 trainer:
-  max_epochs: 50              # Max number of epochs to run
+  max_epochs: 80              # Max number of epochs to run
   accelerator: cpu            # 'cpu', 'gpu', 'ipu'... according to HW
   gpus: null                  # Total number of GPUs to use
   tpu_cores: null             # Total number of TPUs to use
@@ -40,5 +40,5 @@ checkpoints:
 
 early_stopping:
   monitor: Loss/Valid         # Metric to monitor to stop training
-  patience: 5                 # Epochs without improvements to stop training
+  patience: 15                # Epochs without improvements to stop training
   verbose: True               # Say something when you act
