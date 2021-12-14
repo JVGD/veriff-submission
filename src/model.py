@@ -5,9 +5,9 @@ import torch as T
 import torch.nn.functional as F
 from torch import nn
 from torch.utils.data.dataloader import DataLoader
+from torchmetrics import F1, Accuracy, Precision, Recall
 from torchvision import transforms
 from torchvision.datasets import FakeData
-from torchmetrics import Accuracy, F1, Recall, Precision
 
 from src.stn import SpatialTransformerNetwork
 
@@ -78,7 +78,7 @@ class BaseModel(pl.LightningModule):
         samples, targets_true = batch
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
-        self.log("loss/train", loss, on_step=False, on_epoch=True)
+        self.log("Loss/Train", loss, on_step=False, on_epoch=True, metric_attribute='Loss/train')
         return loss
 
     def validation_step(self, batch, batch_idx) -> None:
@@ -87,21 +87,20 @@ class BaseModel(pl.LightningModule):
         samples, targets_true = batch
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
-        self.log("loss/valid", loss, on_step=False, on_epoch=True)
+        self.log("Loss/Valid", loss, on_step=False, on_epoch=True)
 
         # Metrics compute and logging
         self.valid_accuracy(targets_pred, targets_true)
         self.valid_precision(targets_pred, targets_true)
         self.valid_recall(targets_pred, targets_true)
         self.valid_f1(targets_pred, targets_true)
-        self.log("valid/Loss", loss, on_step=False, on_epoch=True)
-        self.log("valid/Accuracy", self.valid_accuracy,
+        self.log("Metrics/Accuracy", self.valid_accuracy,
                  on_step=False, on_epoch=True)
-        self.log("valid/Precision", self.valid_precision,
+        self.log("Metrics/Precision", self.valid_precision,
                  on_step=False, on_epoch=True)
-        self.log("valid/recall", self.valid_recall,
+        self.log("Metrics/Recall", self.valid_recall,
                  on_step=False, on_epoch=True)
-        self.log("valid/F1", self.valid_f1,
+        self.log("Metrics/F1", self.valid_f1,
                  on_step=False, on_epoch=True)
 
     def test_step(self, batch, batch_idx) -> None:
