@@ -1,41 +1,40 @@
 experiment:
-  phase: train
-  save_dir: /weights
+  name: BaseModel       # Name for the experiment folder
+  phase: train          # 'train' or 'test', action to perform
+  save_dir: /weights    # Where to save weights in container
 
 datamodule:
-  data_dir: ./
-  batch_size: 64
-  num_workers: 4
+  data_dir: ./          # Where the data is (or will be downloaded to)
+  batch_size: 64        # Batch size for the training
+  num_workers: 4        # Parallel processes fetching data
 
 model:
   optimizer:
-    lr: 0.01
-    momentum: 0
-    weight_decay: 0
+    lr: 0.01            # Learning rate
+    momentum: 0         # SGD momentum
+    weight_decay: 0     # SGD weight decay
 
 trainer:
-  max_epochs: 100
-  accelerator: cpu
-  gpus: null
-  tpu_cores: null
-  ipus: null
-  log_every_n_steps: 100
-  precision: 32
-  sync_batchnorm: True
-  num_sanity_val_steps: 0
-  overfit_batches: 0
-  fast_dev_run: False
+  max_epochs: 50              # Max number of epochs to run
+  accelerator: cpu            # 'cpu', 'gpu', 'ipu'... according to HW
+  gpus: null                  # Total number of GPUs to use
+  tpu_cores: null             # Total number of TPUs to use
+  ipus: null                  # Total number of IPUs to use
+  log_every_n_steps: 100      # Log training data every X batches
+  precision: 32               # '32' or '16' for half precision
+  num_sanity_val_steps: 0     # Sanity checks are performed with pytest
+  overfit_batches: 0          # Debug flag, overfit X batches
+  fast_dev_run: False         # Debug flag, run with single train/valid batch
 
 tester:
-  checkpoint: weights/BaseModel-001-Test-Ckpt/epoch=2-step=8.ckpt
+  checkpoint: /path/to/checkpoint  # Path to model checkpoint to test
 
 checkpoints:
-  monitor: Loss/Valid
-  save_last: True
-  every_n_epochs: 10
-  verbose: True
+  monitor: Loss/Precision     # Metric to monitor to store weights
+  every_n_epochs: 1           # Save every X epochs (override save top_k)
+  verbose: True               # Say something when you act
 
 early_stopping:
-  monitor: Loss/Valid
-  patience: 20
-  verbose: True
+  monitor: Loss/Valid         # Metric to monitor to stop training
+  patience: 5                 # Epochs without improvements to stop training
+  verbose: True               # Say something when you act
