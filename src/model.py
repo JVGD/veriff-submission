@@ -87,7 +87,7 @@ class BaseModel(pl.LightningModule):
         samples, targets_true = batch
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
-        self.log("Loss/Valid", loss, on_step=False, on_epoch=True)
+        self.log("Loss/Valid")
 
         # Metrics compute and logging
         self.valid_accuracy(targets_pred, targets_true)
