@@ -35,8 +35,8 @@ tester:
 
 checkpoints:
   monitor: Metrics/Precision  # Metric to monitor to store weights
-  every_n_epochs: 1           # Save every X epochs (override save top_k)
   verbose: True               # Say something when you act
+  mode: max                   # Best metric is the maximum one
 
 early_stopping:
   monitor: Loss/Valid         # Metric to monitor to stop training
