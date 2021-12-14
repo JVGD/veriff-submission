@@ -24,4 +24,10 @@ test:
 
 # To develop inside the container
 dev: build
-	docker run -d -it -v $$PWD:/veriff-submission/ --entrypoint /bin/bash javiervargas/veriff-submission:latest
+	docker run -d -it \
+		-v $$PWD:/veriff-submission/ \
+		-v $(CONF):/veriff-submission/conf \
+		-v $(WEIGHTS):/veriff-submission/weights \
+		--entrypoint /bin/bash \
+		--name dev \
+		javiervargas/veriff-submission:latest
