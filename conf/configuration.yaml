@@ -1,5 +1,5 @@
 experiment:
-  name: Experiment1
+  name: BaseModel-001
   save_dir: /weights
 
 datamodule:
@@ -28,11 +28,12 @@ trainer:
 
 checkpoints:
   filename: epoch{epoch}_lossval{val_loss:.2f}
-  monitor: loss/valid
+  monitor: Loss/Valid
   save_last: True
   every_n_epochs: 10
+  verbose: True
 
 early_stopping:
-  monitor: loss/valid
+  monitor: Loss/Valid
   patience: 20
   verbose: True
