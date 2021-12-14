@@ -55,7 +55,7 @@ def test_trainer() -> None:
     # Overriding conf for testing
     conf["trainer"]["max_epochs"] = 1
     conf["trainer"]["overfit_batches"] = 3
-    conf["early_stopping"]["monitor"] = "loss_train"
+    conf["early_stopping"]["monitor"] = "Loss/Train"
 
     # Testing trainer
     train(conf)

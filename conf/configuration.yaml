@@ -14,7 +14,7 @@ model:
     weight_decay: 0
 
 trainer:
-  max_epochs: 200
+  max_epochs: 100
   accelerator: cpu
   gpus: null
   tpu_cores: null
@@ -27,7 +27,6 @@ trainer:
   fast_dev_run: False
 
 checkpoints:
-  filename: epoch{epoch}_lossval{val_loss:.2f}
   monitor: Loss/Valid
   save_last: True
   every_n_epochs: 10

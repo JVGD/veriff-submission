@@ -78,7 +78,7 @@ class BaseModel(pl.LightningModule):
         samples, targets_true = batch
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
-        self.log("Loss/Train", loss, on_step=False, on_epoch=True, metric_attribute='Loss/train')
+        self.log("Loss/Train", loss)
         return loss
 
     def validation_step(self, batch, batch_idx) -> None:
@@ -94,14 +94,10 @@ class BaseModel(pl.LightningModule):
         self.valid_precision(targets_pred, targets_true)
         self.valid_recall(targets_pred, targets_true)
         self.valid_f1(targets_pred, targets_true)
-        self.log("Metrics/Accuracy", self.valid_accuracy,
-                 on_step=False, on_epoch=True)
-        self.log("Metrics/Precision", self.valid_precision,
-                 on_step=False, on_epoch=True)
-        self.log("Metrics/Recall", self.valid_recall,
-                 on_step=False, on_epoch=True)
-        self.log("Metrics/F1", self.valid_f1,
-                 on_step=False, on_epoch=True)
+        self.log("Metrics/Accuracy", self.valid_accuracy)
+        self.log("Metrics/Precision", self.valid_precision)
+        self.log("Metrics/Recall", self.valid_recall)
+        self.log("Metrics/F1", self.valid_f1)
 
     def test_step(self, batch, batch_idx) -> None:
         """Test step for the test loop"""
@@ -109,7 +105,7 @@ class BaseModel(pl.LightningModule):
         samples, targets_true = batch
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
-        self.log("loss_test", loss, on_step=False, on_epoch=True)
+        self.log("Loss/Test", loss)
 
 
 def test_BaseModel_forward() -> None:
@@ -146,7 +142,6 @@ def test_BaseModel_train() -> None:
         checkpoint_callback=False,
         enable_progress_bar=True,
         overfit_batches=5,
-        # fast_dev_run=True,
         max_epochs=1,
         accelerator="cpu"
     )
