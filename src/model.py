@@ -7,6 +7,7 @@ from torch import nn
 from torch.utils.data.dataloader import DataLoader
 from torchvision import transforms
 from torchvision.datasets import FakeData
+from torchmetrics import Accuracy, F1, Recall, Precision
 
 from src.stn import SpatialTransformerNetwork
 
@@ -30,8 +31,14 @@ class BaseModel(pl.LightningModule):
         # Init base class
         super().__init__()
 
-        # Configuration for optimizer
+        # Model conf
         self.optimizer_conf = optimizer
+
+        # Metrics for train valid and test
+        self.valid_accuracy = Accuracy(threshold=0.7, num_classes=10)
+        self.valid_precision = Precision(threshold=0.7, num_classes=10)
+        self.valid_recall = Recall(threshold=0.7, num_classes=10)
+        self.valid_f1 = F1(threshold=0.7, num_classes=10)
 
         # STN
         self.stn = SpatialTransformerNetwork()
@@ -81,6 +88,20 @@ class BaseModel(pl.LightningModule):
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
         self.log("loss_valid", loss, on_step=False, on_epoch=True)
+
+        # Metrics compute and logging
+        self.valid_accuracy(targets_pred, targets_true)
+        self.valid_precision(targets_pred, targets_true)
+        self.valid_recall(targets_pred, targets_true)
+        self.valid_f1(targets_pred, targets_true)
+        self.log("valid_accuracy", self.valid_accuracy,
+                 on_step=False, on_epoch=True)
+        self.log("valid_precision", self.valid_precision,
+                 on_step=False, on_epoch=True)
+        self.log("valid_recall", self.valid_recall,
+                 on_step=False, on_epoch=True)
+        self.log("valid_f1", self.valid_f1,
+                 on_step=False, on_epoch=True)
 
     def test_step(self, batch, batch_idx) -> None:
         """Test step for the test loop"""
