@@ -18,15 +18,15 @@ if __name__ == "__main__":
         conf = yaml.safe_load(f)
 
     # Phase action defined by conf either train or test
-    if conf["experiment"]["phase"] == 'train':
+    if conf["phase"] == 'train':
         # Run trainer
         train(conf)
-    elif conf["experiment"]["phase"] == 'test':
+    elif conf["phase"] == 'test':
         # Run tester
         check(conf)
     else:
         raise ValueError(
             "Only supported phases are: train and test however phase {} "
             "was given, review configuration with path /experiment/phase "
-            "in YAML".format(conf["experiment"]["phase"])
+            "in YAML".format(conf["phase"])
         )

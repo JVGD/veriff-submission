@@ -1,6 +1,10 @@
+# Configuration file
+# Author: Javier Vargas <j.vargas.g.d@gmail.com>
+
+phase: train            # 'train' or 'test', action to perform
+
 experiment:
   name: BaseModel       # Name for the experiment folder
-  phase: train          # 'train' or 'test', action to perform
   save_dir: /weights    # Where to save weights in container
 
 datamodule:
@@ -30,7 +34,7 @@ tester:
   checkpoint: /path/to/checkpoint  # Path to model checkpoint to test
 
 checkpoints:
-  monitor: Loss/Precision     # Metric to monitor to store weights
+  monitor: Metrics/Precision  # Metric to monitor to store weights
   every_n_epochs: 1           # Save every X epochs (override save top_k)
   verbose: True               # Say something when you act
 
