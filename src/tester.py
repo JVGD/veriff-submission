@@ -20,7 +20,7 @@ def test(conf: dict) -> None:
     model = BaseModel.load_from_checkpoint("weights/BaseModel-001-Test-Ckpt/epoch=2-step=8.ckpt")
 
     # Loading PL engine
-    trainer = pl.Trainer()
+    trainer = pl.Trainer(deterministic=True)
 
     # Running test loop and getting a metric
     trainer.test(model, datamodule=dm_mnist)

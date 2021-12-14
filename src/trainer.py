@@ -41,6 +41,7 @@ def train(conf: dict) -> None:
             EarlyStopping(**conf["early_stopping"]),
             DrawSTNTransform()
         ],
+        deterministic=True,
         **conf["trainer"]
     )
 
