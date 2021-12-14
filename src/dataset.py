@@ -12,6 +12,11 @@ class MNISTDataModule(pl.LightningDataModule):
                  num_workers: int=4) -> None:
         """Loading MNIST dataset and data loaders
 
+        MNIST data is coded as:
+
+        * Sample: image of shape 28 x 28 x 1
+        * Target: class id represented as integer
+
         Args:
             data_dir (str, optional): Path to store data. Defaults to ".".
             batch_size (int, optional): Batch size. Defaults to 64.
