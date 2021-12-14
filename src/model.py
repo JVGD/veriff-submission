@@ -28,8 +28,9 @@ class BaseModel(pl.LightningModule):
         Args:
             optimizer (dict): Dict with optimizer conf
         """
-        # Init base class
+        # Init base class & storing hyperparams for easy restart
         super().__init__()
+        self.save_hyperparameters()
 
         # Model conf
         self.optimizer_conf = optimizer
@@ -103,12 +104,28 @@ class BaseModel(pl.LightningModule):
         loss = F.nll_loss(input=targets_pred, target=targets_true)
         self.log("Loss/Test", loss)
 
-        # Metrics compute and logging
+        # Metrics compute
         self.test_accuracy(targets_pred, targets_true)
         self.test_precision(targets_pred, targets_true)
-        self.log("Metrics/Accuracy", self.test_accuracy)
-        self.log("Metrics/Precision", self.test_precision)
+        return {
+            "loss": loss,
+            "accuracy": self.test_accuracy,
+            "precision": self.test_precision
+        }
 
+    def on_test_end(self) -> None:
+        """Logging hparams and test metrics to tensorboard"""
+        # Getting tensorboard writer
+        tb = self.logger.experiment
+
+        # Logging
+        tb.add_hparams(
+            hparam_dict=self.hparams,
+            metric_dict={
+                "accuracy": self.test_accuracy.compute(),
+                "precision": self.test_precision.compute(),
+            }
+        )
 
 def test_BaseModel_forward() -> None:
     """Testing base model"""

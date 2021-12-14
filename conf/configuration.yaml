@@ -1,5 +1,5 @@
 experiment:
-  name: BaseModel-001
+  phase: train
   save_dir: /weights
 
 datamodule:
@@ -25,6 +25,9 @@ trainer:
   num_sanity_val_steps: 0
   overfit_batches: 0
   fast_dev_run: False
+
+tester:
+  checkpoint: weights/BaseModel-001-Test-Ckpt/epoch=2-step=8.ckpt
 
 checkpoints:
   monitor: Loss/Valid
