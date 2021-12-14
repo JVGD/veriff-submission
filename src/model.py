@@ -34,11 +34,11 @@ class BaseModel(pl.LightningModule):
         # Model conf
         self.optimizer_conf = optimizer
 
-        # Metrics for train valid and test
-        self.valid_accuracy = Accuracy(threshold=0.7, num_classes=10)
-        self.valid_precision = Precision(threshold=0.7, num_classes=10)
-        self.valid_recall = Recall(threshold=0.7, num_classes=10)
-        self.valid_f1 = F1(threshold=0.7, num_classes=10)
+        # Metrics for valid and test
+        self.valid_accuracy = Accuracy(threshold=0.9, num_classes=10)
+        self.valid_precision = Precision(threshold=0.9, num_classes=10)
+        self.test_accuracy = Accuracy(threshold=0.9, num_classes=10)
+        self.test_precision = Precision(threshold=0.9, num_classes=10)
 
         # STN
         self.stn = SpatialTransformerNetwork()
@@ -78,7 +78,7 @@ class BaseModel(pl.LightningModule):
         samples, targets_true = batch
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
-        self.log("Loss/Train", loss)
+        self.log("Loss/Train", loss, on_step=False, on_epoch=True)
         return loss
 
     def validation_step(self, batch, batch_idx) -> None:
@@ -92,12 +92,8 @@ class BaseModel(pl.LightningModule):
         # Metrics compute and logging
         self.valid_accuracy(targets_pred, targets_true)
         self.valid_precision(targets_pred, targets_true)
-        self.valid_recall(targets_pred, targets_true)
-        self.valid_f1(targets_pred, targets_true)
         self.log("Metrics/Accuracy", self.valid_accuracy)
         self.log("Metrics/Precision", self.valid_precision)
-        self.log("Metrics/Recall", self.valid_recall)
-        self.log("Metrics/F1", self.valid_f1)
 
     def test_step(self, batch, batch_idx) -> None:
         """Test step for the test loop"""
@@ -106,6 +102,12 @@ class BaseModel(pl.LightningModule):
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
         self.log("Loss/Test", loss)
+
+        # Metrics compute and logging
+        self.test_accuracy(targets_pred, targets_true)
+        self.test_precision(targets_pred, targets_true)
+        self.log("Metrics/Accuracy", self.test_accuracy)
+        self.log("Metrics/Precision", self.test_precision)
 
 
 def test_BaseModel_forward() -> None:
