@@ -7,9 +7,10 @@ from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 
 from src.callbacks import DrawSTNTransform
-from src.dataset import MNISTDataModule
-from src.stnmodel import STNModel
 from src.coordconvmodel import CoordConvModel
+from src.dataset import MNISTDataModule
+from src.skmodel import SKModel
+from src.stnmodel import STNModel
 
 
 def train(conf: dict) -> None:
@@ -65,7 +66,8 @@ def load_model(conf: dict) -> pl.LightningModule:
     # Available models
     available_models = {
         "STNModel": STNModel,
-        "CoordConvModel": CoordConvModel
+        "CoordConvModel": CoordConvModel,
+        "SKModel": SKModel,
     }
 
     # Getting model name & sanity check
