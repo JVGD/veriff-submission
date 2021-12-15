@@ -9,6 +9,31 @@ from pytorch_lightning.loggers import TensorBoardLogger
 from src.callbacks import DrawSTNTransform
 from src.dataset import MNISTDataModule
 from src.stnmodel import STNModel
+from src.coordconvmodel import CoordConvModel
+
+def load_model(conf: dict) -> pl.LightningModule:
+    """Loads the appropriate model
+
+    Args:
+        conf (dict): Configuration dict
+
+    Returns:
+        pl.LightningModule: Model to return
+    """
+    # Available models
+    available_models = {
+        "STNModel": STNModel,
+        "CoordConvModel": CoordConvModel
+    }
+
+    # Getting model name & sanity check
+    model_name = conf["model"].pop('name')
+    assert model_name in available_models, "Model selected does not exist"
+    logging.info(f"Model: {model_name}")
+
+    # Getting model class and returning instance
+    Model = available_models[model_name]
+    return Model(**conf["model"])
 
 
 def train(conf: dict) -> None:
@@ -31,7 +56,7 @@ def train(conf: dict) -> None:
     dm_mnist = MNISTDataModule(**conf["datamodule"])
 
     # Getting the model
-    model = STNModel(**conf["model"])
+    model = load_model(conf)
 
     # Setting up the trainer
     trainer = pl.Trainer(

@@ -13,6 +13,7 @@ datamodule:
   num_workers: 4        # Parallel processes fetching data
 
 model:
+  name: STNModel        # Model to use 'STNModel' or 'CoordConvModel'
   optimizer:
     lr: 0.01            # Learning rate
     momentum: 0         # SGD momentum
