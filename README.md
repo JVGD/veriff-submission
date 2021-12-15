@@ -79,4 +79,37 @@ Then run the project by issuing:
 make run
 ```
 
+## Research
+
+Document findings
+
+## Development
+
+Project structure:
+
+```
+├── Dockerfile: Packages project with reproducible image
+├── MNIST: Data that will be downloaded
+├── Makefile: Package most common actions: run, test and dev
+├── conf: Configuration folder that will be mounted into the docker as a volume
+│   └── configuration.yaml: Configuration file for this project
+├── main.py: Entrypoint for the docker image
+├── pytest.ini: Configuration for pytest, automated code testing
+├── requirements.txt: Python dependencies
+├── src: code
+│   ├── __init__.py: Python module declaration
+│   ├── callbacks.py: Callbacks for drawing digits in tensorboard
+│   ├── coordconv.py: CoordConv module in pytorch
+│   ├── coordconvmodel.py: CoorConv model for training & testing
+│   ├── dataset.py: DataModule from PL: dataset + datamodule
+│   ├── stn.py: STN module in pytorch
+│   ├── stnmodel.py: STN model for training & testing
+│   ├── tester.py: tester script
+│   └── trainer.py: trainer script
+└── weights: automatically created when training, store weights
+    ├── BaseModel: experiment folder named after the experiment name
+    └── CoordConvModel: : experiment folder named after the experiment name
+```
+
+
 
