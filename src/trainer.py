@@ -83,7 +83,7 @@ def load_model(conf: dict) -> pl.LightningModule:
 
     if conf["phase"] == 'test':
         # Instance from checkpoint for testing
-        model = STNModel.load_from_checkpoint(conf["tester"]["checkpoint"])
+        model = Model.load_from_checkpoint(conf["tester"]["checkpoint"])
 
     return model
 
