@@ -18,9 +18,9 @@ run: build
 		-v $(WEIGHTS):/weights \
 		javiervargas/veriff-submission:latest
 
-# Running test (performed inside container)
+# Running code tests
 test:
-	pytest -vv --color=yes ./src
+	docker run --rm -t --entrypoint pytest javiervargas/veriff-submission:latest -vv --color=yes ./src
 
 # To develop inside the container
 dev: build
