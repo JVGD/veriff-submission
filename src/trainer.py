@@ -51,7 +51,10 @@ def train(conf: dict) -> None:
 
 
 def load_model(conf: dict) -> pl.LightningModule:
-    """Loads the appropriate model
+    """Loads the appropriate model from available ones
+
+    Returns vanilla model or trained model according
+    to phase defined in conf: train or test
 
     Args:
         conf (dict): Configuration dict
@@ -70,9 +73,19 @@ def load_model(conf: dict) -> pl.LightningModule:
     assert model_name in available_models, "Model selected does not exist"
     logging.info(f"Model: {model_name}")
 
-    # Getting model class and returning instance
+    # Getting model class
     Model = available_models[model_name]
-    return Model(**conf["model"])
+
+    # Getting model instance
+    if conf["phase"] == 'train':
+        # Instance for training
+        model = Model(**conf["model"])
+
+    if conf["phase"] == 'test':
+        # Instance from checkpoint for testing
+        model = STNModel.load_from_checkpoint(conf["tester"]["checkpoint"])
+
+    return model
 
 
 def test_trainer() -> None:
