@@ -11,30 +11,6 @@ from src.dataset import MNISTDataModule
 from src.stnmodel import STNModel
 from src.coordconvmodel import CoordConvModel
 
-def load_model(conf: dict) -> pl.LightningModule:
-    """Loads the appropriate model
-
-    Args:
-        conf (dict): Configuration dict
-
-    Returns:
-        pl.LightningModule: Model to return
-    """
-    # Available models
-    available_models = {
-        "STNModel": STNModel,
-        "CoordConvModel": CoordConvModel
-    }
-
-    # Getting model name & sanity check
-    model_name = conf["model"].pop('name')
-    assert model_name in available_models, "Model selected does not exist"
-    logging.info(f"Model: {model_name}")
-
-    # Getting model class and returning instance
-    Model = available_models[model_name]
-    return Model(**conf["model"])
-
 
 def train(conf: dict) -> None:
     """Perform the training and save the weights
@@ -72,6 +48,31 @@ def train(conf: dict) -> None:
 
     # Training
     trainer.fit(model, datamodule=dm_mnist)
+
+
+def load_model(conf: dict) -> pl.LightningModule:
+    """Loads the appropriate model
+
+    Args:
+        conf (dict): Configuration dict
+
+    Returns:
+        pl.LightningModule: Model to return
+    """
+    # Available models
+    available_models = {
+        "STNModel": STNModel,
+        "CoordConvModel": CoordConvModel
+    }
+
+    # Getting model name & sanity check
+    model_name = conf["model"].pop('name')
+    assert model_name in available_models, "Model selected does not exist"
+    logging.info(f"Model: {model_name}")
+
+    # Getting model class and returning instance
+    Model = available_models[model_name]
+    return Model(**conf["model"])
 
 
 def test_trainer() -> None:
