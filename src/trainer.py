@@ -8,7 +8,7 @@ from pytorch_lightning.loggers import TensorBoardLogger
 
 from src.callbacks import DrawSTNTransform
 from src.dataset import MNISTDataModule
-from src.stnmodel import BaseModel
+from src.stnmodel import STNModel
 
 
 def train(conf: dict) -> None:
@@ -31,7 +31,7 @@ def train(conf: dict) -> None:
     dm_mnist = MNISTDataModule(**conf["datamodule"])
 
     # Getting the model
-    model = BaseModel(**conf["model"])
+    model = STNModel(**conf["model"])
 
     # Setting up the trainer
     trainer = pl.Trainer(

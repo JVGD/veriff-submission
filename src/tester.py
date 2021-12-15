@@ -5,7 +5,7 @@ from pytorch_lightning.loggers import TensorBoardLogger
 
 sys.path.append(".")
 from src.dataset import MNISTDataModule
-from src.stnmodel import BaseModel
+from src.stnmodel import STNModel
 
 
 def check(conf: dict) -> None:
@@ -18,7 +18,7 @@ def check(conf: dict) -> None:
     dm_mnist = MNISTDataModule(**conf["datamodule"])
 
     # Loading model from checkpoint
-    model = BaseModel.load_from_checkpoint(conf["tester"]["checkpoint"])
+    model = STNModel.load_from_checkpoint(conf["tester"]["checkpoint"])
 
     # Loading PL engine
     trainer = pl.Trainer(

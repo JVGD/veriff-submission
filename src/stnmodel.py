@@ -12,7 +12,7 @@ from torchvision.datasets import FakeData
 from src.stn import SpatialTransformerNetwork
 
 
-class BaseModel(pl.LightningModule):
+class STNModel(pl.LightningModule):
     """Base Model
 
     This PL module implements a base convolutional model which has
@@ -124,10 +124,10 @@ class BaseModel(pl.LightningModule):
             }
         )
 
-def test_BaseModel_forward() -> None:
+def test_STNModel_forward() -> None:
     """Testing base model"""
     # Testing instancing
-    model = BaseModel(optimizer={"lr": 0.01})
+    model = STNModel(optimizer={"lr": 0.01})
 
     # Testing inference shapes
     x = T.rand(8,1,28,28)
@@ -135,7 +135,7 @@ def test_BaseModel_forward() -> None:
     assert y.shape == (8, 10)
 
 
-def test_BaseModel_train() -> None:
+def test_STNModel_train() -> None:
     """Testing training with fake data"""
     # Fake dataset we are testing training logic not convergence
     ds = FakeData(
@@ -150,7 +150,7 @@ def test_BaseModel_train() -> None:
     dl_valid = DataLoader(dataset=ds, batch_size=4, shuffle=False)
 
     # Model to test
-    model = BaseModel(optimizer={"lr": 0.01})
+    model = STNModel(optimizer={"lr": 0.01})
 
     # Trainer setups for test
     trainer = pl.Trainer(
