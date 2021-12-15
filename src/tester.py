@@ -1,6 +1,7 @@
 import sys
 
 import pytorch_lightning as pl
+from pytorch_lightning.loggers import TensorBoardLogger
 
 sys.path.append(".")
 from src.dataset import MNISTDataModule
@@ -17,10 +18,17 @@ def check(conf: dict) -> None:
     dm_mnist = MNISTDataModule(**conf["datamodule"])
 
     # Loading model from checkpoint
-    model = BaseModel.load_from_checkpoint("weights/BaseModel-001-Test-Ckpt/epoch=2-step=8.ckpt")
+    model = BaseModel.load_from_checkpoint(conf["tester"]["checkpoint"])
 
     # Loading PL engine
-    trainer = pl.Trainer(deterministic=True)
+    trainer = pl.Trainer(
+        deterministic=True,
+        logger=TensorBoardLogger(
+            default_hp_metric=False,
+            version="test",
+            **conf["experiment"]
+        )
+    )
 
     # Running test loop and getting a metric
     trainer.test(model, datamodule=dm_mnist)

@@ -102,16 +102,13 @@ class BaseModel(pl.LightningModule):
         samples, targets_true = batch
         targets_pred = self(samples)
         loss = F.nll_loss(input=targets_pred, target=targets_true)
-        self.log("Loss/Test", loss)
+        self.log("Test/Loss", loss)
 
         # Metrics compute
         self.test_accuracy(targets_pred, targets_true)
         self.test_precision(targets_pred, targets_true)
-        return {
-            "loss": loss,
-            "accuracy": self.test_accuracy,
-            "precision": self.test_precision
-        }
+        self.log("Test/Accuracy", self.test_accuracy)
+        self.log("Test/Precision", self.test_precision)
 
     def on_test_end(self) -> None:
         """Logging hparams and test metrics to tensorboard"""
@@ -120,7 +117,7 @@ class BaseModel(pl.LightningModule):
 
         # Logging
         tb.add_hparams(
-            hparam_dict=self.hparams,
+            hparam_dict=dict(self.hparams.optimizer),
             metric_dict={
                 "accuracy": self.test_accuracy.compute(),
                 "precision": self.test_precision.compute(),

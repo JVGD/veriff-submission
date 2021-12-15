@@ -31,7 +31,7 @@ trainer:
   fast_dev_run: False         # Debug flag, run with single train/valid batch
 
 tester:
-  checkpoint: /path/to/checkpoint  # Path to model checkpoint to test
+  checkpoint: weights/BaseModel/epoch=60-step=52459.ckpt  # Path to checkpoint
 
 checkpoints:
   monitor: Metrics/Precision  # Metric to monitor to store weights
