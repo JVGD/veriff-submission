@@ -63,34 +63,36 @@ class SKAttention(nn.Module):
         Returns:
             T.Tensor: Output feature map of same size
         """
-        bs, c, _, _ = x.size()
+        # Getting input size
+        B, C, _, _ = x.size()
+
+        # Splitting: saving output of every branch
         conv_outs=[]
-        ### split
         for conv in self.convs:
             conv_outs.append(conv(x))
-        feats=T.stack(conv_outs,0)#k,bs,channel,h,w
 
-        ### fuse
-        U=sum(conv_outs) #bs,c,h,w
+        # Stacking outputs of the splits
+        feats = T.stack(conv_outs, 0)
 
-        ### reduction channel
-        S=U.mean(-1).mean(-1) #bs,c
-        Z=self.fc(S) #bs,d
+        # Fuse
+        U = sum(conv_outs)      # B x C x H x W
 
-        ### calculate attention weight
+        # Reduction channel
+        S = U.mean(-1).mean(-1) # B x C
+        Z = self.fc(S)          # B x d
+
+        # Selection or attention
         weights=[]
         for fc in self.fcs:
-            weight=fc(Z)
-            weights.append(weight.view(bs,c,1,1)) #bs,channel
-        attention_weughts=T.stack(weights,0)#k,bs,channel,1,1
-        attention_weughts=self.softmax(attention_weughts)#k,bs,channel,1,1
+            weight = fc(Z)
+            weights.append(weight.view(B ,C, 1, 1)) # B x C
 
-        ### fuse
-        V=(attention_weughts*feats).sum(0)
+        weights_att = T.stack(weights, 0)           # k x B x C x 1 x 1
+        weights_att = self.softmax(weights_att)     # k x B x C x 1 x 1
+
+        # Fusing
+        V = (weights_att * feats).sum(0)
         return V
-
-
-
 
 
 
