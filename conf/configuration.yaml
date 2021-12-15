@@ -32,7 +32,7 @@ trainer:
   fast_dev_run: False         # Debug flag, run with single train/valid batch
 
 tester:
-  checkpoint: weights/BaseModel/epoch=60-step=52459.ckpt  # Path to checkpoint
+  checkpoint: weights/STNModel/epoch=60-step=52459.ckpt  # Path to checkpoint
 
 checkpoints:
   monitor: Metrics/Precision  # Metric to monitor to store weights
