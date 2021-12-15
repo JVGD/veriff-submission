@@ -25,6 +25,8 @@ make test
 
 This project defined-by-conf so everything it can be done: training different models, hyperparameters tunning and model testing can be done by modifying the configuration file in `./conf/configuration.yaml`. The configuration file is properly documented.
 
+To provide the conf to the container the conf file in your host system will be maped into /conf/ inside the container as a volume (for more info read the makefile).
+
 #### Training
 
 We can train by setting the configuration file `phase: train` and by selecting a model from available models. 
