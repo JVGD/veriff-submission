@@ -51,10 +51,6 @@ class STNModel(pl.LightningModule):
         self.fc1 = nn.Linear(320, 50)
         self.fc2 = nn.Linear(50, 10)
 
-        # Logging
-        logging.info(f"{self.__class__.__name__}")
-        logging.info(f"optimizer: {self.optimizer_conf}")
-
     def forward(self, x: T.Tensor) -> T.Tensor:
         """Forward Pass of the model"""
         # Spatially transform the input
