@@ -81,7 +81,11 @@ make run
 
 ## Research
 
-Document findings
+Tensorboard with graphs, losses, metrics and final scores is published here: TODO
+
+The findings will be explained in a live session but we will outline main results here:
+
+* STN: It can effectively transform the input image to sample the most representative parts of the image (see Tensorboard images)
 
 ## Development
 
