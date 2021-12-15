@@ -5,7 +5,7 @@ from pytorch_lightning.loggers import TensorBoardLogger
 
 sys.path.append(".")
 from src.dataset import MNISTDataModule
-from src.model import BaseModel
+from src.stnmodel import BaseModel
 
 
 def check(conf: dict) -> None:

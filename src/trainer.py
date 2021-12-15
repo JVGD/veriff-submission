@@ -8,7 +8,7 @@ from pytorch_lightning.loggers import TensorBoardLogger
 
 from src.callbacks import DrawSTNTransform
 from src.dataset import MNISTDataModule
-from src.model import BaseModel
+from src.stnmodel import BaseModel
 
 
 def train(conf: dict) -> None:
