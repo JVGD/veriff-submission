@@ -1,5 +1,6 @@
 import torch as T
 from torch import nn
+from torch.nn.modules import padding
 
 
 class AddCords(nn.Module):
@@ -32,14 +33,14 @@ class AddCords(nn.Module):
         B, C, H, W = x.size()
 
         # Building coordiantes channels
-        i = (T.range(start=0, end=H-1).unsqueeze(0)
-                                      .unsqueeze(0)
-                                      .unsqueeze(-1)
-                                      .repeat([B, 1, 1, W]))
-        j = (T.range(start=0, end=W-1).unsqueeze(0)
-                                      .unsqueeze(0)
-                                      .unsqueeze(0).
-                                      repeat([B, 1, H, 1]))
+        i = (T.arange(start=0, end=H).unsqueeze(0)
+                                     .unsqueeze(0)
+                                     .unsqueeze(-1)
+                                     .repeat([B, 1, 1, W]))
+        j = (T.arange(start=0, end=W).unsqueeze(0)
+                                     .unsqueeze(0)
+                                     .unsqueeze(0).
+                                     repeat([B, 1, H, 1]))
         # Concatenation and return
         return T.cat([x, i, j], dim=1)
 
@@ -85,7 +86,9 @@ class CoordConv(nn.Module):
         return x
 
 
-def test_AddCords():
+def test_AddCords() -> None:
+    """Test AddCords with pytest
+    """
     add_coords = AddCords()
     x = T.rand(1, 1, 5, 5)
     y = add_coords(x)
@@ -113,3 +116,14 @@ def test_AddCords():
          [0., 1., 2., 3., 4.]]
         )
     )
+
+def test_CoordConv() -> None:
+    """Test CoordConv with pytest
+    """
+    # Input tensor
+    x = T.rand(1, 3, 20, 20)
+    cconv = CoordConv(3, 10, 3, padding=1)
+    y = cconv(x)
+
+    # Output tensor validation
+    assert y.shape == (1, 10, 20, 20)
