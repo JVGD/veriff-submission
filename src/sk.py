@@ -95,9 +95,10 @@ class SKAttention(nn.Module):
         return V
 
 
-
-if __name__ == '__main__':
-    input=T.randn(50,10,28,28)
-    se = SKAttention(channel=10,reduction=10)
-    output=se(input)
-    print(output.shape)
+def test_SKBlock() -> None:
+    """Testing SK Block"""
+    x = T.randn(8, 10, 28, 28)
+    se = SKAttention(channel=10,reduction=4)
+    y = se(x)
+    print(y.shape)
+    assert y.shape == (8, 10, 28, 28)
