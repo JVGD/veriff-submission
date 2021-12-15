@@ -85,7 +85,15 @@ Document findings
 
 ## Development
 
-Project structure:
+Development features:
+
+* Packaging: projet packaged as Docker container
+* Usage: through Makefile interface & conf files (scalable to cluster instead of scripting args)
+* Automated testing: test driven development and automated testing with `pytest`
+* Coding: created a simple python module under `./src` and python dependencies are tracked in `requirements.txt`
+* Reproducibility: seeded everything for exact reproducible results
+
+The project structure is as follows:
 
 ```
 ├── Dockerfile: Packages project with reproducible image
