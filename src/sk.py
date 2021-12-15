@@ -10,8 +10,8 @@ class SKAttention(nn.Module):
     """
     def __init__(self,
         channel: int,
-        kernels: list=[1,3,5,7],
-        reduction: int=16,
+        kernels: list=[1,3,5],
+        reduction: int=5,
         group: int=1,
         L: int=32
     ) -> None:
@@ -54,7 +54,15 @@ class SKAttention(nn.Module):
         # Ouput softmax
         self.softmax = nn.Softmax(dim=0)
 
-    def forward(self, x: T.Tensor):
+    def forward(self, x: T.Tensor) -> T.Tensor:
+        """Forward pass of SK Block
+
+        Args:
+            x (T.Tensor): Input feature map
+
+        Returns:
+            T.Tensor: Output feature map of same size
+        """
         bs, c, _, _ = x.size()
         conv_outs=[]
         ### split
