@@ -4,7 +4,7 @@
 phase: train            # 'train' or 'test', action to perform
 
 experiment:
-  name: BaseModel       # Name for the experiment folder
+  name: STNModel        # Name for the experiment folder
   save_dir: /weights    # Where to save weights in container
 
 datamodule:
