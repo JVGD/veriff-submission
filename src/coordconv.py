@@ -35,11 +35,11 @@ class AddCords(nn.Module):
         i = (T.range(start=0, end=H-1).unsqueeze(0)
                                       .unsqueeze(0)
                                       .unsqueeze(-1)
-                                      .repeat([B,1,1,W])/(H/2)-1)
+                                      .repeat([B, 1, 1, W]))
         j = (T.range(start=0, end=W-1).unsqueeze(0)
                                       .unsqueeze(0)
                                       .unsqueeze(0).
-                                      repeat([B,1,H,1])/(W/2)-1)
+                                      repeat([B, 1, H, 1]))
         # Concatenation and return
         return T.cat([x, i, j], dim=1)
 
@@ -83,3 +83,33 @@ class CoordConv(nn.Module):
         # Standar conv
         x = self.conv(x)
         return x
+
+
+def test_AddCords():
+    add_coords = AddCords()
+    x = T.rand(1, 1, 5, 5)
+    y = add_coords(x)
+
+    # Checking output shape
+    assert y.shape == (1, 3, 5, 5)
+
+    # Checking coords channels
+    i = y[0,1]
+    j = y[0,2]
+
+    assert T.all(i == T.tensor(
+        [[0., 0., 0., 0., 0.],
+         [1., 1., 1., 1., 1.],
+         [2., 2., 2., 2., 2.],
+         [3., 3., 3., 3., 3.],
+         [4., 4., 4., 4., 4.]]
+        )
+    )
+    assert T.all(j == T.tensor(
+        [[0., 1., 2., 3., 4.],
+         [0., 1., 2., 3., 4.],
+         [0., 1., 2., 3., 4.],
+         [0., 1., 2., 3., 4.],
+         [0., 1., 2., 3., 4.]]
+        )
+    )
