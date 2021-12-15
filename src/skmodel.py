@@ -21,11 +21,11 @@ class SKModel(STNModel):
         super().__init__(optimizer)
 
         # Overwriting conv with Conv + SK Attention
-        self.conv1 = nn.ModuleList([
+        self.conv1 = nn.Sequential(
             nn.Conv2d(1, 10, kernel_size=5),
             SKAttention(10)
-        ])
-        self.conv2 = nn.ModuleList([
+        )
+        self.conv2 = nn.Sequential(
             nn.Conv2d(10, 20, kernel_size=5),
             SKAttention(20)
-        ])
+        )
