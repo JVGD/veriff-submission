@@ -1,9 +1,6 @@
-import numpy as np
-import torch
+import torch as T
 from torch import nn
-from torch.nn import init
 from collections import OrderedDict
-
 
 
 class SKAttention(nn.Module):
@@ -17,7 +14,7 @@ class SKAttention(nn.Module):
         reduction: int=16,
         group: int=1,
         L: int=32
-    ):
+    ) -> None:
         """Init SK block
 
         Args:
@@ -31,10 +28,10 @@ class SKAttention(nn.Module):
         super().__init__()
 
         # Computing d size
-        self.d=max(L,channel//reduction)
+        self.d = max(L, channel // reduction)
 
         # Convolutions for splitting
-        self.convs=nn.ModuleList([])
+        self.convs = nn.ModuleList([])
         for k in kernels:
             self.convs.append(
                 nn.Sequential(OrderedDict([
@@ -47,23 +44,23 @@ class SKAttention(nn.Module):
             )
 
         # Reduction layer
-        self.fc=nn.Linear(channel,self.d)
+        self.fc = nn.Linear(channel, self.d)
 
         # Select layer: soft attention across channels
-        self.fcs=nn.ModuleList([])
+        self.fcs = nn.ModuleList([])
         for i in range(len(kernels)):
-            self.fcs.append(nn.Linear(self.d,channel))
+            self.fcs.append(nn.Linear(self.d, channel))
 
         # Ouput softmax
-        self.softmax=nn.Softmax(dim=0)
+        self.softmax = nn.Softmax(dim=0)
 
-    def forward(self, x):
+    def forward(self, x: T.Tensor):
         bs, c, _, _ = x.size()
         conv_outs=[]
         ### split
         for conv in self.convs:
             conv_outs.append(conv(x))
-        feats=torch.stack(conv_outs,0)#k,bs,channel,h,w
+        feats=T.stack(conv_outs,0)#k,bs,channel,h,w
 
         ### fuse
         U=sum(conv_outs) #bs,c,h,w
@@ -77,7 +74,7 @@ class SKAttention(nn.Module):
         for fc in self.fcs:
             weight=fc(Z)
             weights.append(weight.view(bs,c,1,1)) #bs,channel
-        attention_weughts=torch.stack(weights,0)#k,bs,channel,1,1
+        attention_weughts=T.stack(weights,0)#k,bs,channel,1,1
         attention_weughts=self.softmax(attention_weughts)#k,bs,channel,1,1
 
         ### fuse
@@ -90,7 +87,7 @@ class SKAttention(nn.Module):
 
 
 if __name__ == '__main__':
-    input=torch.randn(50,10,28,28)
+    input=T.randn(50,10,28,28)
     se = SKAttention(channel=10,reduction=10)
     output=se(input)
     print(output.shape)
