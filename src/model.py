@@ -119,8 +119,8 @@ class BaseModel(pl.LightningModule):
         tb.add_hparams(
             hparam_dict=dict(self.hparams.optimizer),
             metric_dict={
-                "accuracy": self.test_accuracy.compute(),
-                "precision": self.test_precision.compute(),
+                "hparam/accuracy": self.test_accuracy.compute(),
+                "hparam/precision": self.test_precision.compute(),
             }
         )
 
