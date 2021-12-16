@@ -13,6 +13,7 @@ build:
 # be the CONF folder with the configuration for the run, the outputs
 # weights will be saved in the WEIGHTS volume for persistency
 run: build
+	mkdir -p $(WEIGHTS)
 	docker run --rm -it \
 		-v $(CONF):/conf \
 		-v $(WEIGHTS):/weights \
