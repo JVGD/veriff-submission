@@ -97,6 +97,9 @@ Two metrics have been considered: Precision and Accuracy. The justification is a
 
 * Accuracy: for clients with a different revenue model, for example authenticating the age of the user to get a ride in an electric motorbike. The electric motorbike company wants as many rides as possible. It does not want to lend motorbikes to underage people but it does not care if we miss few predictions from time to time because that turns into revenue.
 
+![Precision](https://user-images.githubusercontent.com/6736158/146328354-4ea88035-8611-44e9-85ea-bb779fc32520.png)
+
+
 ## Development
 
 Development features:
