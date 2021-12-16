@@ -89,6 +89,8 @@ The findings will be explained in a live session but we will outline main result
 * CoordConv: By adding coordinate channels to the input image it eases the operations of spatial transformations
 * SK: Uses selective attention based on multiple scale input allowing the CNN to modify its input receptive field dynamically 
 
+![STN Transforms](https://user-images.githubusercontent.com/6736158/146327856-eef91d2f-30ff-4f67-9436-5d07ea7c096a.png)
+
 Two metrics have been considered: Precision and Accuracy. The justification is as follows:
 
 * Precision: if we have a client autheticating for getting a loan we do not want to have False Positives (FP) because the cost of giving a loan to the wrong person is very high. On the other hand, if the rightful holder of the identity fails to authenticate, a False Negative (FN), although annoying, he can try again and succeed. So the cost of the FN is not as high and can be tolerable.
