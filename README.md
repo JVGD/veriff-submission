@@ -81,8 +81,6 @@ make run
 
 ## Research
 
-Tensorboard with graphs, losses, metrics and final scores is published here: TODO
-
 The findings will be explained in a live session but we will outline main results here: [Tensorboard](https://tensorboard.dev/experiment/sNygezqtRc6tornRzFeApg/). **NOTE: Uploading images to Tensorboard dev is yet not supported so STN images will be uploaded here**
 
 * STN: It can effectively transform the input image to sample the most representative parts of the image (see Tensorboard images)
